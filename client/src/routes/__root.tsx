@@ -1,6 +1,5 @@
 import Footer from '@/components/layout/Footer'
 import Header from '@/components/layout/Header'
-import PropertyGrid from '@/components/properties/PropertyGrid'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
@@ -13,7 +12,6 @@ export const Route = createRootRoute({
         <main className="container mx-auto p-4">
           <Outlet />
         </main>
-        <PropertyGrid />
         <Footer />
         <TanStackRouterDevtools />
       </div>
