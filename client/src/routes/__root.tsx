@@ -9,7 +9,7 @@ export const Route = createRootRoute({
       <div className="app">
         <Header />
         <hr />
-        <main className="container mx-auto p-4">
+        <main>
           <Outlet />
         </main>
         <Footer />
