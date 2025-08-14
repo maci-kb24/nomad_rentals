@@ -10,7 +10,6 @@ function Properties() {
   return (
     <div>
       <PropertyGrid />
-      <h1>Properties Listings</h1>
       {/* {propertiesdetails.map((property) => (
         <div key={property.id} className="property-item">
           <Link
