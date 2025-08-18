@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import config from './config/config.js';
 
 const app = express();
 const PORT = 5000;
@@ -17,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`🔗 Test your API at http://localhost:${PORT}/api/test`);
+app.listen(config.port, () => {
+  console.log(`🚀 Server running on http://localhost:${config.port}`);
+  console.log(`🔗 Test your API at http://localhost:${config.port}/api/test`);
 });
