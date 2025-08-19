@@ -1,12 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import config from './config/config.js';
+import { logger } from './middleware/logger.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
 const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
+
+app.use(logger);
 
 app.get('/', (req, res) => {
   res.json({ 
@@ -20,5 +24,10 @@ app.get('/', (req, res) => {
 
 app.listen(config.port, () => {
   console.log(`🚀 Server running on http://localhost:${config.port}`);
-  console.log(`🔗 Test your API at http://localhost:${config.port}/api/test`);
 });
+
+app.get('/test-error', (req, res) => {
+  throw new Error('This is a test error!');
+});
+
+app.use(errorHandler);
