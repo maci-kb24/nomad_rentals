@@ -17,7 +17,6 @@ const AuthTest = () => {
         </div>
       ) : (
         <p>❌ Not logged in</p>
-        
       )}
     </div>
   )

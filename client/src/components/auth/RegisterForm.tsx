@@ -1,112 +1,116 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import { useState } from 'react'
+import { useAuth } from '../../hooks/useAuth'
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Link } from "@tanstack/react-router"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
-/**
- * A registration form component using shadcn/ui components.
- * This form includes fields for name, email, and password, 
- * and a link to a login page.
- */
-interface RegistrationFormProps extends React.ComponentProps<"div"> {
-  className?: string;
-}
+const RegisterForm = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
+  
+  const { signUp } = useAuth()
 
-const RegistrationForm: React.FC<RegistrationFormProps> = ({
-  className,
-  ...props
-}) => {
-  // A simple state to manage form data, although not used for submission in this example.
-  const [formData, setFormData] = React.useState({
-    name: "",
-    email: "",
-    password: ""
-  });
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Check if passwords match
+    if (password !== confirmPassword) {
+      setMessage('Error: Passwords do not match')
+      return
+    }
+    
+    // Check password length
+    if (password.length < 6) {
+      setMessage('Error: Password must be at least 6 characters')
+      return
+    }
+    
+    setLoading(true)
+    
+    if (!signUp) {
+      setMessage('Error: Authentication not initialized')
+      setLoading(false)
+      return
+    }
 
-  // A basic handler for form submission.
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log("Form submitted with data:", formData);
-    // You would typically handle form validation and API calls here.
-  };
+    const { error } = await signUp(email, password)
 
-  // A handler to update the form data state.
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = event.target;
-    setFormData(prevData => ({
-      ...prevData,
-      [id]: value
-    }));
-  };
+    if (error && typeof error === 'object' && 'message' in error) {
+      setMessage(`Error: ${error.message}`)
+    } else {
+      setMessage('Success! Check your email for verification link.')
+      // Clear form
+      setEmail('')
+      setPassword('')
+      setConfirmPassword('')
+    }
+    
+    setLoading(false)
+  }
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl">Create an account</CardTitle>
-          <CardDescription>
-            Enter your details below to create your account.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit}>
-            <div className="grid gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  placeholder="John Doe"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <Button type="submit" className="w-full">
-                Create an account
-              </Button>
-            </div>
-          </form>
-          <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
-            <Link to="/login" className="underline underline-offset-4">
-              Login
-            </Link>
+    <Card className="w-[400px]">
+      <CardHeader>
+        <CardTitle>Create an Account</CardTitle>
+        <CardDescription>
+          Enter your information to create your account.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleRegister} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="register-email">Email</Label>
+            <Input
+              id="register-email"
+              type="email"
+              placeholder="m@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
-        </CardContent>
-      </Card>
-    </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="register-password">Password</Label>
+            <Input
+              id="register-password"
+              type="password"
+              placeholder="At least 6 characters"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="confirm-password">Confirm Password</Label>
+            <Input
+              id="confirm-password"
+              type="password"
+              placeholder="Re-enter your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+          </div>
+          
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? 'Creating account...' : 'Create Account'}
+          </Button>
+          
+          {message && (
+            <div className={`text-sm p-3 rounded ${message.includes('Error') ? 'text-red-600 bg-red-50' : 'text-green-600 bg-green-50'}`}>
+              {message}
+            </div>
+          )}
+        </form>
+      </CardContent>
+    </Card>
   )
 }
 
-export default RegistrationForm 
+export default RegisterForm
