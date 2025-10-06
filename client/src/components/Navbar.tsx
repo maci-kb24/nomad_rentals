@@ -11,6 +11,17 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "../hooks/useAuth";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
+} from "@radix-ui/react-dropdown-menu";
+import { Home, LogOut, Settings, User } from "lucide-react";
 
 const links = [
   { to: "/", label: "Home" },
@@ -20,6 +31,7 @@ const links = [
 ];
 
 const Navbar = () => {
+  const { user, loading, signOut } = useAuth();
   return (
     <>
       <div className="navbar flex items-center justify-between">
@@ -50,14 +62,60 @@ const Navbar = () => {
           </NavigationMenu>
         </div>
         <div className="flex items-center">
-          <Link
-            to="/login"
-          >
-            <Avatar className="cursor-pointer">
-              <AvatarImage src="https://placehold.co/50" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </Link>
+          {loading ? (
+            <div className="w-10 h-10 rounded-full bg-gray-200 animate-pulse" />
+          ) : user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="cursor-pointer">
+                  <AvatarImage
+                    src={user.user_metadata?.avatar_url || undefined}
+                    alt={user.email || "User Avatar"}
+                  />
+                  <AvatarFallback>
+                    {user.email?.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium">My Account</p>
+                    <p className="text-xs text-gray-500">{user.email}</p>
+                  </div>
+                </DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem asChild >
+                  <Link to="/profile" className="flex items-center cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </Link></DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/dashboard" className="flex items-center cursor-pointer">
+                  <Home className="mr-2 h-4 w-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/settings" className="flex items-center cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem onClick={signOut} className="cursor-pointer text-red-600 focus:text-red-600"><LogOut className="mr-2 h-4 w-4" /><span>Log Out</span></DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Link to="/login">
+              <Button variant="default">Login</Button>
+            </Link>
+          )}
         </div>
       </div>
     </>
