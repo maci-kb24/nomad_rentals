@@ -2,7 +2,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '../../hooks/useAuth'
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,7 +41,7 @@ const RegisterForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  //  const { signUp } = useAuth();
+   const { signUp } = useAuth();
 
   const {
     register,
@@ -57,28 +57,28 @@ const RegisterForm = () => {
       setSuccessMessage("");
       setErrorMessage("");
 
-      // if(!signup) {
-      //   setErrorMessage("Authentication not initialized.");
-      //   return;
-      // }
+      if(!signUp) {
+        setErrorMessage("Authentication not initialized.");
+        return;
+      }
 
-      // const {error} =  await signup(data.email, data.password);
+      const {error} =  await signUp(data.email, data.password);
 
-      // if (error && typeof error === "object" && "message" in error) {
-      //   setErrorMessage(error.message);
-      // } else {
-      //   setSuccessMessage("Account created successfully! You can now log in.");
-      //   setTimeout(() => {
-      //     setSuccessMessage("");
-      //     reset();
-      //   }, 3000);
-      // }
+      if (error && typeof error === "object" && "message" in error && typeof error.message === "string") {
+        setErrorMessage(error.message);
+      } else {
+        setSuccessMessage("Account created successfully! You can now log in.");
+        setTimeout(() => {
+          setSuccessMessage("");
+          reset();
+        }, 3000);
+      }
 
-      setSuccessMessage("Account created successfully! You can now log in.");
-      setTimeout(() => {
-        setSuccessMessage("");
-        reset();
-      }, 3000);
+      // setSuccessMessage("Account created successfully! You can now log in.");
+      // setTimeout(() => {
+      //   setSuccessMessage("");
+      //   reset();
+      // }, 3000);
     } catch (error) {
       console.error("Registration failed:", error);
       setErrorMessage("Error creating account. Please try again.");

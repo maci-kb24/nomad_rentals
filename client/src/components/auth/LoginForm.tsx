@@ -2,7 +2,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,8 +26,11 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [loginSuccess, setLoginSuccess] = useState(false);
+   const [showPassword, setShowPassword] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const { signIn } = useAuth();
 
   const {
     register,
@@ -38,22 +41,37 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  // const { signIn = () => ({ error: new Error('Auth not initialized') }) } = useAuth()
-
   const onSubmit = async (data: LoginFormInputs) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Login Data:", data);
+      setSuccessMessage("");
+      setErrorMessage("");
 
-      setLoginSuccess(true);
+      if (!signIn) {
+        setErrorMessage("Authentication not initialized.");
+        return;
+      }
 
-      setTimeout(() => {
-        setLoginSuccess(false);
-        reset();
-      }, 3000);
-      
+      const { error } = await signIn(data.email, data.password);
+
+      if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        typeof error.message === "string"
+      ) {
+        setErrorMessage(error.message);
+        return;
+      } else {
+        setSuccessMessage("Login successful! Welcome back.");
+
+        setTimeout(() => {
+          setSuccessMessage("");
+          reset();
+        }, 3000);
+      }
     } catch (error) {
       console.error("Login failed:", error);
+      setErrorMessage("Login failed. Please try again.");
     }
   };
 
@@ -67,10 +85,17 @@ const LoginForm = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {loginSuccess && (
-            <Alert className="mb-4 border-green-200 bg-green-50">
+          {successMessage && (
+            <Alert className="mb-4 bg-green-50 border-green-200">
               <AlertDescription className="text-green-800">
-                ✓ Login successful! Welcome back.
+                ✓ {successMessage}
+              </AlertDescription>
+            </Alert>
+          )}
+          {errorMessage && (
+            <Alert className="mb-4 bg-red-50 border-red-200">
+              <AlertDescription className="text-red-800">
+                ✗ {errorMessage}
               </AlertDescription>
             </Alert>
           )}
