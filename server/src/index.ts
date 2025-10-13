@@ -3,9 +3,10 @@ import cors from 'cors';
 import config from './config/config.js';
 import { logger } from './middleware/logger.js';
 import { errorHandler } from './middleware/errorHandler.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
-const PORT = 5000;
+// const PORT = 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -20,6 +21,9 @@ app.get('/', (req, res) => {
   });
 });
 
+app.use('/api/auth', authRoutes);
+
+// Start the server
 
 app.listen(config.port, () => {
   console.log(`🚀 Server running on http://localhost:${config.port}`);

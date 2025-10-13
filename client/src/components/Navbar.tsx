@@ -22,6 +22,7 @@ import {
   DropdownMenuItem,
 } from "@radix-ui/react-dropdown-menu";
 import { Home, LogOut, Settings, User } from "lucide-react";
+import { useRouter } from '@tanstack/react-router'
 
 const links = [
   { to: "/", label: "Home" },
@@ -32,6 +33,15 @@ const links = [
 
 const Navbar = () => {
   const { user, loading, signOut } = useAuth();
+  const router = useRouter();
+  
+const handleLogout = async () => {
+  if (signOut) {
+    await signOut();
+    router.navigate({ to: '/' });
+  }
+}
+
   return (
     <>
       <div className="navbar flex items-center justify-between">
@@ -108,7 +118,7 @@ const Navbar = () => {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem onClick={signOut} className="cursor-pointer text-red-600 focus:text-red-600"><LogOut className="mr-2 h-4 w-4" /><span>Log Out</span></DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 focus:text-red-600"><LogOut className="mr-2 h-4 w-4" /><span>Log Out</span></DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (

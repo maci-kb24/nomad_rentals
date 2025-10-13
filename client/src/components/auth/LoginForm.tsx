@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
+import { useRouter, useSearch } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,6 +32,9 @@ const LoginForm = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const { signIn } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearch({ from: "/login" });
+  const redirectTo = searchParams.redirect || "/dashboard";
 
   const {
     register,
@@ -65,9 +69,10 @@ const LoginForm = () => {
         setSuccessMessage("Login successful! Welcome back.");
 
         setTimeout(() => {
+          router.navigate({ to: redirectTo });
           setSuccessMessage("");
           reset();
-        }, 3000);
+        }, 500);
       }
     } catch (error) {
       console.error("Login failed:", error);
