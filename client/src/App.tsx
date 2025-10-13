@@ -5,14 +5,15 @@ import { router } from "./lib/router";
 export function App() {
   const auth = useAuth();
 
-   console.log('🚀 App rendering - auth state:', { 
-    email: auth.user?.email || 'null', 
-    loading: auth.loading 
-  });
-
   if (auth.loading) {
-    console.log('⏳ App: Waiting for initial auth check...')
-    return <div>Loading...</div> // Or a proper loading spinner
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   return <RouterProvider router={router} context={{ auth }} />;

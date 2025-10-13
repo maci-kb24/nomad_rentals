@@ -19,13 +19,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log("🔄 AuthProvider: Initializing...");
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log(
-        "✅ Initial session check:",
-        session?.user?.email || "No user"
-      );
       setUser(session?.user ?? null);
       setLoading(false);
     });
@@ -33,29 +28,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log(
-        "🔔 Auth state changed:",
-        event,
-        session?.user?.email || "No user"
-      );
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    return () => {
-      console.log("🧹 Cleaning up auth subscription");
-      subscription?.unsubscribe();
-    };
+    return () => subscription?.unsubscribe();
   }, []);
 
   const signUp = async (email: string, password: string) => {
     const { error } = await supabase.auth.signUp({ email, password });
-
     return { error };
   };
 
   const signIn = async (email: string, password: string) => {
-    
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -65,7 +50,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const signOut = async () => {
-    
     await supabase.auth.signOut();
     setUser(null);
     
@@ -78,11 +62,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     signIn,
     signOut,
   };
-
-  console.log("📊 AuthContext value:", {
-    email: user?.email || "null",
-    loading,
-  });
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
