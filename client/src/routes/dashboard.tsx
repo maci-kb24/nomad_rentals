@@ -3,10 +3,21 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 export const Route = createFileRoute("/dashboard")({
   
   beforeLoad: ({ context, location }) => {
-    console.log('🔍 beforeLoad running...')
-    console.log('Auth context:', context.auth)
+    console.log('=' .repeat(50))
+    console.log('🔍 DASHBOARD beforeLoad EXECUTING')
+    console.log('Context:', context)
+    console.log('Auth object:', context.auth)
     console.log('User:', context.auth?.user)
     console.log('Loading:', context.auth?.loading)
+    console.log('=' .repeat(50))
+
+      if (!context.auth) {
+        console.error('⚠️ No auth context available')
+        throw redirect({
+          to: "/login",
+        });
+      }
+
     const { user, loading } = context.auth;
 
     if (loading) {

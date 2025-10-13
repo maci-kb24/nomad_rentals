@@ -6,10 +6,15 @@ export interface RouterContext {
   auth: ReturnType<typeof useAuth>;
 }
 
+export const router = createRouter({ 
+   routeTree,
+   context: undefined!,
+   defaultPreload: 'intent',
+  });
+
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router
   }
 }
 
-export const router = createRouter({ routeTree, context: undefined! as unknown as RouterContext });

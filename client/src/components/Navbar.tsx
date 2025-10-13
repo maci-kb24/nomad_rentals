@@ -123,7 +123,7 @@ const handleLogout = async () => {
             </DropdownMenu>
           ) : (
             <Link to="/login">
-              <Button variant="default">Login</Button>
+              <Button variant="default" className="cursor-pointer">Login</Button>
             </Link>
           )}
         </div>
