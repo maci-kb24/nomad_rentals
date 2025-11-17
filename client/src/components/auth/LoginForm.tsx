@@ -56,6 +56,7 @@ const LoginForm = () => {
       }
 
       const { error } = await signIn(data.email, data.password);
+      
 
       if (
         error &&

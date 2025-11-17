@@ -20,5 +20,26 @@ model User {
   name  String
   email String @unique
   createdAt DateTime @default(now()) @map("created_at")
+  properties Property[]
+
+  @@map("users")
 }
 
+model Property {
+  id        Int      @id @default(autoincrement())
+  title     String
+  description String
+  price     Float
+  address   String
+  city     String
+  bedrooms Int
+  bathrooms Int
+  isAvailable Boolean  @default(true) @map("is_available")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  ownerId  Int   @map("owner_id")
+  owner User  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@map("properties")
+}

@@ -6,6 +6,9 @@ export const Route = createFileRoute("/dashboard")({
       if (!context.auth) {
         throw redirect({
           to: "/login",
+          search: {
+            redirect: location.href, 
+          },
         });
       }
 
@@ -24,10 +27,10 @@ export const Route = createFileRoute("/dashboard")({
       });
     }
   },
-  component: DashboardComponent,
+  component: Dashboard,
 });
 
-function DashboardComponent() {
+function Dashboard() {
   const { auth } = Route.useRouteContext();
   const { user } = auth;
 

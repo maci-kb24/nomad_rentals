@@ -8,7 +8,7 @@ import type { RouterContext } from '@/lib/router'
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => (
     <>
-      <div className="app">
+      <div className="app dark:bg-gray-900 dark:text-white">
         <Header />
         <hr />
         <main>
