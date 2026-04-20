@@ -23,7 +23,7 @@ Develop a specialized rental marketplace that addresses these pain points with:
 - **Secondary**: Corporate housing managers and relocation specialists
 - **Tertiary**: Traditional long-term tenants seeking furnished accommodations
 
-## 🎯 Project Goals
+## Project Goals
 
 ### Learning Objectives
 1. **Master Modern React Ecosystem**

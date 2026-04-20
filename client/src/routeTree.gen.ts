@@ -72,7 +72,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/properties/$propertyId': typeof PropertiesPropertyIdRoute
-  '/properties': typeof PropertiesIndexLazyRoute
+  '/properties/': typeof PropertiesIndexLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -105,7 +105,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/properties/$propertyId'
-    | '/properties'
+    | '/properties/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -186,7 +186,7 @@ declare module '@tanstack/react-router' {
     '/properties/': {
       id: '/properties/'
       path: '/properties'
-      fullPath: '/properties'
+      fullPath: '/properties/'
       preLoaderRoute: typeof PropertiesIndexLazyRouteImport
       parentRoute: typeof rootRouteImport
     }

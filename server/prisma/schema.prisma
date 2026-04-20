@@ -11,35 +11,36 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  // url      = env("DATABASE_URL")
+  // directUrl = env("DIRECT_URL")
 }
 
-model User {
-  id    Int @id @default(autoincrement())
-  name  String
-  email String @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  properties Property[]
+// model User {
+//   id    String @id @default(uuid())
+//   name  String
+//   email String @unique
+//   createdAt DateTime @default(now()) @map("created_at")
+//   listings Listing[]
 
-  @@map("users")
-}
+//   @@map("users")
+// }
 
-model Property {
-  id        Int      @id @default(autoincrement())
+model Listing {
+  id        String @id @default(uuid())
   title     String
   description String
   price     Float
-  address   String
-  city     String
-  bedrooms Int
-  bathrooms Int
-  isAvailable Boolean  @default(true) @map("is_available")
+  location  String
+  // address   String
+  // city     String
+  // bedrooms Int
+  // bathrooms Int
+  // isAvailable Boolean  @default(true) @map("is_available")
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  // updatedAt   DateTime @updatedAt @map("updated_at")
 
-  ownerId  Int   @map("owner_id")
-  owner User  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  // ownerId  String   @map("owner_id")
+  // owner User  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  @@map("properties")
+  // @@map("listings")
 }
