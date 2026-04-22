@@ -9,9 +9,16 @@ router.post('/register', (req, res) => {
   });
 });
 
-router.post('/login', (req, res) => {
+router.post('/signin', (req, res) => {
   res.json({ 
-    message: 'Login endpoint - coming soon!',
+    message: 'Sign in endpoint - coming soon!',
+    received: req.body 
+  });
+});
+
+router.post('/signout', (req, res) => {
+  res.json({ 
+    message: 'Sign out endpoint - coming soon!',
     received: req.body 
   });
 });

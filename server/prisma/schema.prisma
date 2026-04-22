@@ -6,24 +6,24 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  // output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  // url      = env("DATABASE_URL")
-  // directUrl = env("DIRECT_URL")
+  url = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-// model User {
-//   id    String @id @default(uuid())
-//   name  String
-//   email String @unique
-//   createdAt DateTime @default(now()) @map("created_at")
-//   listings Listing[]
+model User {
+  id    String @id @default(uuid())
+  name  String
+  email String @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  listings Listing[]
 
-//   @@map("users")
-// }
+  @@map("users")
+}
 
 model Listing {
   id        String @id @default(uuid())
@@ -31,16 +31,10 @@ model Listing {
   description String
   price     Float
   location  String
-  // address   String
-  // city     String
-  // bedrooms Int
-  // bathrooms Int
-  // isAvailable Boolean  @default(true) @map("is_available")
   createdAt DateTime @default(now()) @map("created_at")
-  // updatedAt   DateTime @updatedAt @map("updated_at")
 
-  // ownerId  String   @map("owner_id")
-  // owner User  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId  String   @map("owner_id")
+  owner User  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
-  // @@map("listings")
+  @@map("listings")
 }
