@@ -18,8 +18,10 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesPropertyIdRouteImport } from './routes/properties/$propertyId'
+import { Route as ListingsListingIdRouteImport } from './routes/listings/$listingId'
 
 const PropertiesIndexLazyRouteImport = createFileRoute('/properties/')()
+const ListingsIndexLazyRouteImport = createFileRoute('/listings/')()
 
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
@@ -58,9 +60,21 @@ const PropertiesIndexLazyRoute = PropertiesIndexLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/properties/index.lazy').then((d) => d.Route),
 )
+const ListingsIndexLazyRoute = ListingsIndexLazyRouteImport.update({
+  id: '/listings/',
+  path: '/listings/',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() =>
+  import('./routes/listings/index.lazy').then((d) => d.Route),
+)
 const PropertiesPropertyIdRoute = PropertiesPropertyIdRouteImport.update({
   id: '/properties/$propertyId',
   path: '/properties/$propertyId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsListingIdRoute = ListingsListingIdRouteImport.update({
+  id: '/listings/$listingId',
+  path: '/listings/$listingId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -71,7 +85,9 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/listings/$listingId': typeof ListingsListingIdRoute
   '/properties/$propertyId': typeof PropertiesPropertyIdRoute
+  '/listings/': typeof ListingsIndexLazyRoute
   '/properties/': typeof PropertiesIndexLazyRoute
 }
 export interface FileRoutesByTo {
@@ -81,7 +97,9 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/listings/$listingId': typeof ListingsListingIdRoute
   '/properties/$propertyId': typeof PropertiesPropertyIdRoute
+  '/listings': typeof ListingsIndexLazyRoute
   '/properties': typeof PropertiesIndexLazyRoute
 }
 export interface FileRoutesById {
@@ -92,7 +110,9 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/listings/$listingId': typeof ListingsListingIdRoute
   '/properties/$propertyId': typeof PropertiesPropertyIdRoute
+  '/listings/': typeof ListingsIndexLazyRoute
   '/properties/': typeof PropertiesIndexLazyRoute
 }
 export interface FileRouteTypes {
@@ -104,7 +124,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/listings/$listingId'
     | '/properties/$propertyId'
+    | '/listings/'
     | '/properties/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -114,7 +136,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/listings/$listingId'
     | '/properties/$propertyId'
+    | '/listings'
     | '/properties'
   id:
     | '__root__'
@@ -124,7 +148,9 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/login'
     | '/register'
+    | '/listings/$listingId'
     | '/properties/$propertyId'
+    | '/listings/'
     | '/properties/'
   fileRoutesById: FileRoutesById
 }
@@ -135,7 +161,9 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ListingsListingIdRoute: typeof ListingsListingIdRoute
   PropertiesPropertyIdRoute: typeof PropertiesPropertyIdRoute
+  ListingsIndexLazyRoute: typeof ListingsIndexLazyRoute
   PropertiesIndexLazyRoute: typeof PropertiesIndexLazyRoute
 }
 
@@ -190,11 +218,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PropertiesIndexLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/listings/': {
+      id: '/listings/'
+      path: '/listings'
+      fullPath: '/listings/'
+      preLoaderRoute: typeof ListingsIndexLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/properties/$propertyId': {
       id: '/properties/$propertyId'
       path: '/properties/$propertyId'
       fullPath: '/properties/$propertyId'
       preLoaderRoute: typeof PropertiesPropertyIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings/$listingId': {
+      id: '/listings/$listingId'
+      path: '/listings/$listingId'
+      fullPath: '/listings/$listingId'
+      preLoaderRoute: typeof ListingsListingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -207,7 +249,9 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ListingsListingIdRoute: ListingsListingIdRoute,
   PropertiesPropertyIdRoute: PropertiesPropertyIdRoute,
+  ListingsIndexLazyRoute: ListingsIndexLazyRoute,
   PropertiesIndexLazyRoute: PropertiesIndexLazyRoute,
 }
 export const routeTree = rootRouteImport

@@ -12,7 +12,7 @@ Nomad Rentals is an platform specifically tailored for long-term rentals (1+ mon
 
 ## Tech Stack
 **Frontend:** React, TypeScript, TanStack Router, Tailwind CSS, shadcn/ui  
-**Backend:** Node.js, Express, PostgreSQL, Prisma
+**Backend:** Node.js, Express, Prisma, PostgreSQL with Supabase
 
 ## Getting Started
 1. Clone the repository - git clone https://github.com/yourusername/nomad-rentals.git
