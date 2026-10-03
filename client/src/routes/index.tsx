@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, MapPin, Calendar, Users } from 'lucide-react'
 import { createFileRoute } from '@tanstack/react-router'
-import AuthTest from '@/components/auth/AuthTest'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -46,7 +45,6 @@ function Home() {
         </div>
       </section>
 
-      <AuthTest />
 
       {/* Features Section */}
       <section className="py-16 bg-gray-50 dark:bg-gray-800 dark:text-white">
