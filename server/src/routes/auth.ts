@@ -2,6 +2,13 @@ import { Router } from 'express';
 
 const router = Router();
 
+router.post('/sync', (req, res) => {
+  res.json({ 
+    message: 'Sync endpoint - coming soon!',
+    received: req.body 
+  });
+});
+
 router.post('/signup', (req, res) => {
   res.json({ 
     message: 'Sign up endpoint - coming soon!',
