@@ -1,13 +1,16 @@
 import { Router } from 'express';
+import { syncUserController } from '../controllers/authController.js';
 
 const router = Router();
 
-router.post('/sync', (req, res) => {
-  res.json({ 
-    message: 'Sync endpoint - coming soon!',
-    received: req.body 
-  });
-});
+router.use((req, res, next) => {
+  console.log('🛣️ Auth router hit:', req.method, req.path)
+  console.log('🛣️ Body at router level:', req.body)
+  next()
+})
+
+router.post('/sync', syncUserController);
+
 
 router.post('/signup', (req, res) => {
   res.json({ 

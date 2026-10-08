@@ -20,8 +20,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const syncUserWithBackend = async (session: any) => {
+      console.log('🚀 syncUserWithBackend called with:', session?.user?.id)
+
     try {
-      console.log("🔄 Syncing user with backend...");
+      console.log("📤 Sending to backend:", {
+        id: session.user.id,
+        email: session.user.email,
+        name: session.user.user_metadata?.full_name ?? null,
+      });
 
       const response = await fetch("http://localhost:3000/api/auth/sync", {
         method: "POST",
@@ -90,7 +96,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       email,
       password,
     });
-    
 
     return { error };
   };
