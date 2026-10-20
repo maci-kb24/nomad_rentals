@@ -60,6 +60,7 @@ export const createListing = async (
 // Update an existing listing
 export const updateListing = async (
   id: string,
+  ownerId: string,
   data: {
     title?: string;
     description?: string;
@@ -68,9 +69,33 @@ export const updateListing = async (
   },
 ) => {
   console.log('📝 Service: updating listing in database:', id, data);
-  
+  const existing = await prisma.listing.findUnique({ where: { id } })
+  if (!existing) throw new Error('Listing not found')
+  if (existing.ownerId !== ownerId) throw new Error('Forbidden')
+
   return await prisma.listing.update({
     where: { id },
     data,
+  });
+};
+
+// Delete a listing
+export const deleteListing = async (id: string, ownerId: string) => {
+  console.log('📝 Service: deleting listing from database:', id);
+  const existing = await prisma.listing.findUnique({ where: { id } })
+  if (!existing) throw new Error('Listing not found')
+  if (existing.ownerId !== ownerId) throw new Error('Forbidden')
+
+  await prisma.listing.delete({
+    where: { id },
+  });
+  return { message: 'Listing deleted successfully' };
+};
+
+// Get listings by owner ID
+export const getListingsByOwnerId = async (ownerId: string) => {
+  console.log('📝 Service: fetching listings by owner id from database:', ownerId);
+  return await prisma.listing.findMany({
+    where: { ownerId },
   });
 };
